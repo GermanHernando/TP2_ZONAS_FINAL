@@ -9,20 +9,26 @@ const zonasValidas = new Set(Object.keys(resultados));
 const candidatosValidos = new Set(["candidatoA", "candidatoB", "candidatoC", "enblanco"]);
 
 const postVoto = async (zona,candidato) =>{
-    let mensaje = null;
+    let mensaje = {};
     let candidatoOk = false;
     let zonaOk = false;
     if (!zonasValidas.has(zona)) {
-        mensaje = { error: "zona no correspondiente" };
+        mensaje.error = "zona no correspondiente";
     }else{
         zonaOk = true
     }
     if (!candidatosValidos.has(candidato)) {
-        mensaje +=  { error: "candidato no válido" };
+        mensaje.error = mensaje.error ? mensaje.error + ", candidato no válido" : "candidato no válido";  // Concatenamos errores en un solo string.
     }else{
         candidatoOk = true;
     }
     if(zonaOk && candidatoOk){
+        if (!resultados[zona]) {
+            resultados[zona] = {};  
+        }
+        if (!resultados[zona][candidato]) {
+            resultados[zona][candidato] = 0;  
+        }
         resultados[zona][candidato] ++;
         mensaje = { exito: "voto cargado" };
     }
@@ -43,9 +49,13 @@ const getVotosGenerales = async () => {
 
 const totalVotosCandidatos = async () => {
     const totales = { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 };
-    for (const zona in resultados){
-        for(candidato in resultados[zona]){
-            totales[candidato]+= resultados[zona][candidato];
+    for (const zona in resultados) {
+        if (resultados.hasOwnProperty(zona)) {
+            for (const candidato in resultados[zona]) {
+                if (totales.hasOwnProperty(candidato)) {
+                    totales[candidato] += Number(resultados[zona][candidato]) || 0;
+                }
+            }
         }
     }
     return totales

@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Ayelensita Rosita Axelradsita",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2"
