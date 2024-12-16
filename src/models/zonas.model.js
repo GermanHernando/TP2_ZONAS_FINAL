@@ -5,42 +5,50 @@ const resultados = [
     { zona:"zona4",candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
 ];
 
-const zonasValidas = new Set(Object.keys(resultados));
+const zonasValidas = new Set(resultados.map(r => r.zona));  // Obtenemos las zonas válidas desde los objetos en el arreglo
 const candidatosValidos = new Set(["candidatoA", "candidatoB", "candidatoC", "enblanco"]);
 
-const postVoto = async (zona,candidato) =>{
+const postVoto = async (zona, candidato) => {
     let mensaje = {};
     let candidatoOk = false;
     let zonaOk = false;
+
+    // Verificación de la zona
     if (!zonasValidas.has(zona)) {
         mensaje.error = "zona no correspondiente";
-    }else{
-        zonaOk = true
+    } else {
+        zonaOk = true;
     }
+
+    // Verificación del candidato
     if (!candidatosValidos.has(candidato)) {
-        mensaje.error = mensaje.error ? mensaje.error + ", candidato no válido" : "candidato no válido";  // Concatenamos errores en un solo string.
-    }else{
+        mensaje.error = mensaje.error ? mensaje.error + ", candidato no válido" : "candidato no válido";
+    } else {
         candidatoOk = true;
     }
-    if(zonaOk && candidatoOk){
-        if (!resultados[zona]) {
-            resultados[zona] = {};  
+
+    // Si tanto la zona como el candidato son válidos, procesamos el voto
+    if (zonaOk && candidatoOk) {
+        // Buscar el objeto de la zona en el arreglo resultados
+        const zonaEncontrada = resultados.find(z => z.zona === zona);
+
+        if (zonaEncontrada) {
+            zonaEncontrada[candidato]++;  // Incrementamos el contador del candidato seleccionado
+            mensaje = { exito: "voto cargado" };
+        } else {
+            mensaje.error = "Zona no encontrada en los resultados";
         }
-        if (!resultados[zona][candidato]) {
-            resultados[zona][candidato] = 0;  
-        }
-        resultados[zona][candidato] ++;
-        mensaje = { exito: "voto cargado" };
     }
-    return mensaje
-}
+
+    return mensaje;
+};
 
 const getVotosPorZona = async (zona) => {
-    let zonaBuscada = null
-    if(resultados.has(zona)){
-        zonaBuscada = resultados[zona]
-    }
-    return zonaBuscada
+    // Buscamos la zona dentro del array de resultados
+    let zonaBuscada = resultados.find(z => z.zona === zona);
+    
+    // Si la zona fue encontrada, la retornamos. Si no, retornamos null
+    return zonaBuscada ? zonaBuscada : null;
 }
 
 const getVotosGenerales = async () => {
@@ -49,16 +57,20 @@ const getVotosGenerales = async () => {
 
 const totalVotosCandidatos = async () => {
     const totales = { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 };
-    for (const zona in resultados) {
-        if (resultados.hasOwnProperty(zona)) {
-            for (const candidato in resultados[zona]) {
-                if (totales.hasOwnProperty(candidato)) {
-                    totales[candidato] += Number(resultados[zona][candidato]) || 0;
-                }
+    
+    // Iterar sobre el array de resultados
+    for (const zona of resultados) {
+        // Iterar sobre los candidatos dentro de cada zona
+        for (const candidato in zona) {
+            // Excluir la propiedad 'zona' que no es un candidato
+            if (candidato !== "zona" && totales.hasOwnProperty(candidato)) {
+                // Sumar los votos del candidato a los totales
+                totales[candidato] += Number(zona[candidato]) || 0;
             }
         }
     }
-    return totales
+    
+    return totales;
 }
 
 export default{
