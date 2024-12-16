@@ -1,9 +1,9 @@
-const resultados = {
-    zona1: { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
-    zona2: { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
-    zona3: { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
-    zona4: { candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
-};
+const resultados = [
+    {zona:"zona1", candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
+    { zona:"zona2",candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
+    { zona:"zona3",candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
+    { zona:"zona4",candidatoA: 0, candidatoB: 0, candidatoC: 0, enblanco: 0 },
+];
 
 const zonasValidas = new Set(Object.keys(resultados));
 const candidatosValidos = new Set(["candidatoA", "candidatoB", "candidatoC", "enblanco"]);

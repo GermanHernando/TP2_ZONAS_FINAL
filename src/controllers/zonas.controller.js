@@ -2,8 +2,7 @@ import service from "../services/zonas.services.js"
 
 const postVoto = async (req,res) =>{
     try {
-    const zona = req.body
-    const calificacion = req.body
+    const {zona,calificacion} = req.body
     const zonas = await service.postVoto(zona,calificacion)
     res.json(zonas)    
     } catch (error) {
