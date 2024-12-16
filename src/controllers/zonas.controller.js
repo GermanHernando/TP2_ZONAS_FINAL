@@ -2,8 +2,8 @@ import service from "../services/zonas.services.js"
 
 const postVoto = async (req,res) =>{
     try {
-    const {zona,calificacion} = req.body
-    const zonas = await service.postVoto(zona,calificacion)
+    const {zona,candidato} = req.body
+    const zonas = await service.postVoto(zona,candidato)
     res.json(zonas)    
     } catch (error) {
         console.log(`Ha ocurrido un error: ${error}}`)

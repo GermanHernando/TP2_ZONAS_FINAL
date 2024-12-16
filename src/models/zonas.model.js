@@ -6,7 +6,7 @@ const resultados = [
 ];
 
 const zonasValidas = new Set(resultados.map(r => r.zona));  // Obtenemos las zonas válidas desde los objetos en el arreglo
-const candidatosValidos = new Set(["candidatoA", "candidatoB", "candidatoC", "enblanco"]);
+const candidatosValidos = ["candidatoA", "candidatoB", "candidatoC", "enblanco"];
 
 const postVoto = async (zona, candidato) => {
     let mensaje = {};
@@ -21,7 +21,7 @@ const postVoto = async (zona, candidato) => {
     }
 
     // Verificación del candidato
-    if (!candidatosValidos.has(candidato)) {
+    if (!candidatosValidos.includes(candidato)) {
         mensaje.error = mensaje.error ? mensaje.error + ", candidato no válido" : "candidato no válido";
     } else {
         candidatoOk = true;
